@@ -1,2 +1,2 @@
 # LLM with RAG
-Implemented LLM with RAG to give insights on AWFIS company
+Implemented LLM with RAG to give investors insights on AWFIS company.
