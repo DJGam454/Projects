@@ -110,13 +110,20 @@ def format_response_html(response_text):
     return formatted_text
 
 # Together API integration
-TOGETHER_API_KEY = "***REMOVED-ROTATE-ME***"
-together_client = Together(api_key=TOGETHER_API_KEY)
+# Read from the environment. The literal key that used to live here was
+# committed to a public repo and is in git history, so treat it as revoked
+# and rotate it at api.together.xyz. Put the new value in .env, which is
+# gitignored.
+TOGETHER_API_KEY = os.environ.get("TOGETHER_API_KEY", "")
+together_client = Together(api_key=TOGETHER_API_KEY) if TOGETHER_API_KEY else None
 
 def get_together_response(prompt):
     """
     Fetch a response from the Together API.
     """
+    if together_client is None:
+        logging.error("TOGETHER_API_KEY is not set; skipping the Together call.")
+        return "The AI assistant is not configured. Set TOGETHER_API_KEY in .env."
     try:
         response = together_client.chat.completions.create(
             model="meta-llama/Llama-Vision-Free",
